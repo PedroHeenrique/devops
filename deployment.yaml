@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: backend-deployment
+   namespace: java-projects
+spec:
+   replicas: 4
+   selector:
+     matchLabels:
+       app: backend-java
+   template:
+       metadata:
+         labels:
+           app: backend-java
+       spec:
+         containers:
+         - name: java-api
+           image: staticvooidmain/backend-java:1.1
+           imagePullPolicy: Always
+           env:
+             - name: POD_NAME
+               valueFrom:
+                 fieldRef:
+                  fieldPath: metadata.name
+           resources:
+              requests:
+                memory: "512Mi"
+                cpu: "250m"
+              limits:
+                memory: "1Gi"
+                cpu: "500m"
+           ports:
+           - containerPort: 8080
